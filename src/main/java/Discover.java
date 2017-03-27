@@ -1,33 +1,39 @@
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import org.aeonbits.owner.ConfigFactory;
-import org.apache.commons.io.IOUtils;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLConnection;
-import java.nio.Buffer;
-import java.util.*;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
+import org.aeonbits.owner.ConfigFactory;
 import org.apache.commons.codec.binary.Base64;
 
-public class Main {
+import com.google.gson.Gson;
+
+/**
+ * Finds github projects that may be AIResources AI/machine projects based on keywords.
+ * The output is a list of github projects in the github_project table
+ * 
+ * @author tyler140910@gmail.com
+ *
+ */
+public class Discover {
     private AppConfig params;
     private String baseUrl;
     private String githubToken;
     Gson gson = new Gson();
     Connection connect;
 
-    public Main() throws SQLException {
+    public Discover() throws SQLException {
         try {
             Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException e) {
@@ -44,50 +50,41 @@ public class Main {
     }
 
     public static void main(String[] args) throws IOException {
-        if(args[0] == null){
-            System.out.println("No argument given, please supply an argument of either gofish, or assign");
-            System.exit(1);
-        }
-
-        Main main = null;
+        Discover main = null;
 
         try {
-            main = new Main();
+            main = new Discover();
         } catch (SQLException e) {
             e.printStackTrace();
             System.out.println("Fatal Error: Unable to connect to database, Exiting ...");
             System.exit(1);
         }
 
-        if(args[0].equals("gofish")){
-            System.out.println("using keyword list to find new projects from github ...");
-            main.goFish();
-        } else if(args[0].equals("assign")){
-
-        }
+        System.out.println("using keyword list to find new projects from github ...");
+        main.goFish();
     }
 
-    private void assign() throws SQLException {
-        ArrayList<String> githubProjects = new ArrayList<String>();
-        PreparedStatement statement = connect.prepareStatement("SELECT identifier FROM openair5.github_project");
-        ResultSet rs = statement.executeQuery();
-        while (rs.next()){
-            githubProjects.add(rs.getString("identifier"));
-        }
-        System.out.println("please type the name of the editor you would like to assign github projects to and press enter:");
-        Scanner scan = new Scanner(System.in);
-        String editor = scan.next();
-        System.out.println("Please enter the number of projects you would like to assign to " + editor + " and press enter:");
-        int numProjects = scan.nextInt();
-        System.out.println("Assigning " + numProjects + " to " + editor);
+//    private void assign() throws SQLException {
+//        ArrayList<String> githubProjects = new ArrayList<String>();
+//        PreparedStatement statement = connect.prepareStatement("SELECT identifier FROM openair5.github_project");
+//        ResultSet rs = statement.executeQuery();
+//        while (rs.next()){
+//            githubProjects.add(rs.getString("identifier"));
+//        }
+//        System.out.println("please type the name of the editor you would like to assign github projects to and press enter:");
+//        Scanner scan = new Scanner(System.in);
+//        String editor = scan.next();
+//        System.out.println("Please enter the number of projects you would like to assign to " + editor + " and press enter:");
+//        int numProjects = scan.nextInt();
+//        System.out.println("Assigning " + numProjects + " to " + editor);
+//
+//
+//    }
 
-
-    }
-
-    private ArrayList<String> getExistingResourceLinks(){
-        ArrayList<String> resourceLinks = new ArrayList<String>();
-        
-    }
+//    private ArrayList<String> getExistingResourceLinks(){
+//        ArrayList<String> resourceLinks = new ArrayList<String>();
+//        
+//    }
 
     private void goFish() {
 
