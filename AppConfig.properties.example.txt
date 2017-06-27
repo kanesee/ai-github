@@ -1,0 +1,16 @@
+# 1. Replace the values in this file to your own
+# 2. Rename the file to AppConfig.properties
+
+# Add your Github API Token
+github_token=123
+
+# Database
+# Replace these values with your own
+db=localhost:3306
+db_user=root
+db_password=password
+
+# Additional API Options
+# options to query Github API go here
+# TODO: document available options
+stars_cutoff=100
